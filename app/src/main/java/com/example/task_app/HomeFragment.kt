@@ -8,6 +8,8 @@ import androidx.appcompat.widget.SearchView
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import java.text.SimpleDateFormat
+import java.util.*
 
 class HomeFragment : Fragment() {
 
@@ -15,6 +17,8 @@ class HomeFragment : Fragment() {
     private lateinit var searchView: SearchView
     private lateinit var adapter: TaskAdapter
     private var fullList = mutableListOf<Task>()
+
+    private val sdf = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -25,18 +29,20 @@ class HomeFragment : Fragment() {
 
         searchView = view.findViewById(R.id.search_view)
         searchView.isIconified = false
+
         recyclerView = view.findViewById(R.id.recycler_view)
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
         val mainActivity = activity as? MainActivity
-        val taskList = mainActivity?.taskList ?: mutableListOf()
+        val rawList = mainActivity?.taskList ?: mutableListOf()
+
+        val taskList = rawList.sortedBy { parseDate(it.data) }.toMutableList()
 
         adapter = TaskAdapter(taskList) {
             adapter.notifyDataSetChanged()
         }
 
         recyclerView.adapter = adapter
-
         fullList = taskList.toMutableList()
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
@@ -52,11 +58,21 @@ class HomeFragment : Fragment() {
                                 it.categoria.contains(newText, true)
                     }
                 }
-                adapter.filterList(filtered.toMutableList())
+
+                val sorted = filtered.sortedBy { parseDate(it.data) }.toMutableList()
+                adapter.filterList(sorted)
                 return true
             }
         })
 
         return view
+    }
+
+    private fun parseDate(dateStr: String): Date {
+        return try {
+            sdf.parse(dateStr) ?: Date(0)
+        } catch (e: Exception) {
+            Date(0)
+        }
     }
 }
