@@ -14,14 +14,12 @@ class MainActivity : AppCompatActivity() {
     // Lista global de tarefas
     val taskList = ArrayList<Task>()
 
-    private lateinit var searchView: SearchView
     private lateinit var bottomNav: BottomNavigationView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        searchView = findViewById(R.id.search_view)
         bottomNav = findViewById(R.id.bottom_nav)
 
         supportFragmentManager.beginTransaction()

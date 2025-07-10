@@ -26,6 +26,7 @@ class BuscarFragment : Fragment() {
 
         recyclerView = view.findViewById(R.id.categoryRecyclerView)
         searchView = view.findViewById(R.id.searchView)
+        searchView.isIconified = false
 
         recyclerView.layoutManager = LinearLayoutManager(requireContext())
 
