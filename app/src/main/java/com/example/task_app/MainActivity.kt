@@ -11,6 +11,9 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
 
+    // Lista global de tarefas
+    val taskList = ArrayList<Task>()
+
     private lateinit var searchView: SearchView
     private lateinit var bottomNav: BottomNavigationView
 
@@ -21,7 +24,6 @@ class MainActivity : AppCompatActivity() {
         searchView = findViewById(R.id.search_view)
         bottomNav = findViewById(R.id.bottom_nav)
 
-        // Fragmento inicial padrão (Home)
         supportFragmentManager.beginTransaction()
             .replace(R.id.frame_container, HomeFragment())
             .commit()
